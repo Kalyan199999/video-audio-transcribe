@@ -1,9 +1,7 @@
 const Audio = require('../../model/audio_model')
 const { genAIAudioTranscribe } = require('../../gemini-api-models/gen-ai-audio-transcribe');
-const { response } = require('express');
 
 const get_audio = async (req,res)=>{
-
     try 
     {
         const data = await Audio.find();
@@ -33,8 +31,6 @@ const post_audio = async (req,res)=>{
     try 
     {
         const file = req.file
-
-        console.log(file);
         
         const response = await genAIAudioTranscribe(file.path);
         
@@ -61,7 +57,7 @@ const post_audio = async (req,res)=>{
             {
                 ok:false,
                 message:"Error while transcribing the audio!",
-                data:response.text
+                error:response
             }
         )
     } 
@@ -71,7 +67,7 @@ const post_audio = async (req,res)=>{
             {
                 ok:false,
                 message:"Error while adding audio!",
-                data:error.message
+                data:error
             }
         )
     }
