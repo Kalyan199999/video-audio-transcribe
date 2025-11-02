@@ -1,4 +1,5 @@
 const path = require("path");
+const fs = require('fs')
 
 function getMediaMimeType(filePath) 
 {
@@ -33,6 +34,30 @@ function getMediaMimeType(filePath)
   return null; // Return null if the file extension is not recognized
 }
 
+const getFileToGenerativePart = (filePath) => {
+
+  // Read the file
+  const fileBytes = Buffer.from( fs.readFileSync(filePath) ).toString("base64");
+
+  // Detect file MIME type (adjust if needed)
+  let mimeType = getMediaMimeType(filePath)
+
+  return (
+    {
+      inlineData: 
+      {
+          mimeType,
+          data: fileBytes,
+        }
+    }
+  )
+
+}
+
+// console.log( getFileToGenerativePart("C:\\Users\\hp\\OneDrive\\Desktop\\transcribers\\backend\\uploads\\audios\\audio-1761897463585-427041730.mp3") );
+
+
 module.exports = {
   getMediaMimeType,
+  getFileToGenerativePart
 }

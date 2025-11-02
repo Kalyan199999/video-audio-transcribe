@@ -1,26 +1,23 @@
 const {  model } = require('./gen-ai');
-const fs = require('fs')
-const { getMediaMimeType } = require('../utils/util')
+// const fs = require('fs')
+const { getFileToGenerativePart } = require('../utils/util')
 
 const genAIAudioTranscribe = async (filePath) => 
 {
   try 
   {
     // Read the file
-    const audioBytes = fs.readFileSync(filePath).toString("base64");
+    // const audioBytes = fs.readFileSync(filePath).toString("base64");
 
-    // Detect file MIME type (adjust if needed)
-    let mimeType = getMediaMimeType(filePath)
+    // // Detect file MIME type (adjust if needed)
+    // let mimeType = getMediaMimeType(filePath)
+
+    const fileData = getFileToGenerativePart(filePath)
     
     // Send audio to Gemini model for transcription
     const result = await model.generateContent([
       { text: 'Transcribe this audio to text accurately!' },
-      {
-        inlineData: {
-          mimeType,
-          data: audioBytes,
-        },
-      },
+      fileData
     ]);
 
     // Extract text output
