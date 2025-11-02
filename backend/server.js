@@ -11,6 +11,8 @@ const video_file_route = require('./routes/video/video-file-route.js')
 const audio_file_route = require('./routes/audio/audio-file-route.js')
 const audio_link_route = require('./routes/audio/audio-link-route.js')
 
+const user_route = require('./routes/user/user-route.js')
+
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -25,6 +27,9 @@ app.use('/api/link/video',video_link_route);
 // handles audios
 app.use('/api/file/audio', audio_file_route );
 app.use( '/api/link/audio' , audio_link_route );
+
+// hendles users
+app.use('/api/user' , user_route );
 
 app.listen( port , ()=>{
     try 
