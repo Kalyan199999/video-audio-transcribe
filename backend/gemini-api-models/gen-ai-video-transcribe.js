@@ -5,6 +5,7 @@ const {
 
 const { genAI, model } = require('./gen-ai');
 const { getMediaMimeType } = require('../utils/util');
+const { getFileToGenerativePart } = require('../utils/util')
 
 const genAIVideoLinkTranscribe = async (url) => 
 {
@@ -44,34 +45,15 @@ const genAIVideoTranscribe = async (filePath) =>
 {
     try 
     {
-        // get the memetype of the file
-        const memetype = getMediaMimeType(filePath);
+        const fileData = getFileToGenerativePart(filePath)
+    
+        // Send video to Gemini model for transcription
+        const result = await model.generateContent([
+          { text: 'Transcribe this video to text accurately!' },
+          fileData
+        ]);
 
-        // check for valid mimetype
-        if( !memetype )
-        {
-            return{
-                ok:false,
-                error: "Invalid file type. Only audio or video files are supported."
-            }
-        }
-
-        // upload the file to the API
-        const myfile = await genAI.files.upload({
-                    file: filePath,
-                    config: { mimeType: memetype },
-                });
-
-        // transcibe the video
-        const response = await model.generateContent({
-                    contents: createUserContent([
-                      createPartFromUri(myfile.uri, myfile.mimeType),
-                      "Transcribe this Video to text accurately",
-                    ]),
-                });
-
-        // get the text
-        const transcript = response.text();
+    const transcript = result.response.text();
 
         console.log( transcript );
 
@@ -82,7 +64,7 @@ const genAIVideoTranscribe = async (filePath) =>
     }
     catch (error) 
     {
-         console.error("Transcription error:", error);
+        console.error("Transcription error:", error);
 
         return (
             {

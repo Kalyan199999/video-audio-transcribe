@@ -98,7 +98,7 @@ const post_file_video = async (req, res) =>
         return res.status(400).json({
           ok:false, 
           message: "Failed",
-          data:error.message,
+          data:error,
         });
     }
 }
