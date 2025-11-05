@@ -57,7 +57,50 @@ const getFileToGenerativePart = (filePath) => {
 // console.log( getFileToGenerativePart("C:\\Users\\hp\\OneDrive\\Desktop\\transcribers\\backend\\uploads\\audios\\audio-1761897463585-427041730.mp3") );
 
 
+const validateEmail = (email) => 
+{
+    
+     if (!email) 
+    {
+      return "Email is required";
+    } 
+    else if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email.trim())) 
+    {
+      
+      return "Enter a valid email address";
+    }
+    return null;
+}
+
+const validatePassword = (password) => 
+{
+    if (!password) {
+      return "Password is required";
+    }
+
+  // Check length
+   if (password.length < 8) 
+   {
+     return "Password must be at least 8 characters long";
+   }
+
+  // Regex for lowercase, uppercase, number, and special character
+    const regex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^])[A-Za-z\d@$!%*?&#^]{8,}$/;
+
+    if (!regex.test(password)) 
+    {
+        return "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character";
+    }
+
+  return null;
+};
+
+
+
 module.exports = {
   getMediaMimeType,
-  getFileToGenerativePart
+  getFileToGenerativePart,
+  validateEmail,
+  validatePassword
 }

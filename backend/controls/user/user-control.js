@@ -1,4 +1,6 @@
 const User = require('../../model/user_model')
+const { validateEmail, validatePassword } = require('../../utils/util')
+
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const saltRounds = 10;
@@ -9,17 +11,26 @@ const register = async (req, res) =>
     try 
     {
         const { email, password } = req.body;
-        
-        if (!email || !password) 
+
+        const checkEmail = validateEmail(email);
+
+        const checkPassword = validatePassword(password);
+
+        if( checkEmail )
         {
-            return res.status(400).json({ message: 'Email and password are required.',ok:false  });
+            return res.status(400).json({ message: checkEmail,ok:false  });
+        }
+
+        if( checkPassword )
+        {
+            return res.status(400).json({ message: checkPassword,ok:false  });
         }
 
         const existingUser = await User.findOne({ email });
 
         if (existingUser) 
         {
-            return res.status(409).json({ message: 'User already exists.',ok:false });
+            return res.status(409).json({ message: 'Email already exists.Enter new Mail to register',ok:false });
         }
         
         const hashedPassword = await bcrypt.hash( password, saltRounds );
@@ -37,9 +48,11 @@ const register = async (req, res) =>
                 ok:true,
                 message: 'User registered successfully.', 
                 token:token,
-                data:newUser.email
+                data:{
+                    email:newUser.email,
+                    id:newUser._id
+                }
             });
-
     } 
     catch (error) 
     {
@@ -50,14 +63,18 @@ const register = async (req, res) =>
 
 const getuserByEmail = async (req, res) => 
 {
-
     try 
     {
         const { email } = req.body;
 
-        if (!email) 
+        const checkEmail = validateEmail(email)
+
+        if (checkEmail) 
         {
-            return res.status(400).json({ message: 'Email is required.',ok:false  });
+            return res.status(400).json({ 
+                message: checkEmail,
+                ok:false  
+            });
         }
 
         const user = await User.findOne({ email });
@@ -67,26 +84,39 @@ const getuserByEmail = async (req, res) =>
             return res.status(404).json({ message: 'User not found.',ok:false  });
         }
 
-        return res.status(200).json({ data: user,ok:true });
+        return res.status(200).json({ 
+            data: {
+                email:user.email,
+                id:user._id
+            },
+            ok:true,
+            message: 'User found successfully.'
+         });
     } 
     catch (error) 
     {
         return res.status(500).json({ message: 'Internal server error.',ok:false  });
     }
-
 }
 
 const getusers = async (req, res) => 
 {
     try 
     {
-        const user = await User.findOne({ });
+        const user = await User.find({ });
 
-        return res.status(200).json({ data: user,ok:true });
+        return res.status(200).json({ 
+            data: user,
+            ok:true,
+            message:"User fetched successfully!"
+         });
     } 
     catch (error) 
     {
-        return res.status(500).json({ message: 'Internal server error.',ok:false  });
+        return res.status(500).json({ 
+            message: 'Internal server error.',
+            ok:false  
+        });
     }
 }
 
@@ -97,9 +127,16 @@ const login = async (req, res) =>
     {
         const { email, password } = req.body;
 
-        if (!email || !password) 
+        if (!password) 
         {
             return res.status(400).json({ message: 'Email and password are required.',ok:false  });
+        }
+
+        const checkEmail = validateEmail(email);
+
+        if( checkEmail )
+        {
+            return res.status(400).json({ message: checkEmail,ok:false  });
         }
 
         const user = await User.findOne({ email });
@@ -126,9 +163,12 @@ const login = async (req, res) =>
         return res.status(200).json(
             { 
                 ok:true,
-                message: 'User loged in successfully.', 
+                message: 'User loged in successfully.',
                 token:token,
-                data:user.email
+                data:{
+                    email:user.email,
+                    id:user._id
+                }
             });
 
 
