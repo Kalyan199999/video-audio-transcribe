@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link , useNavigate } from "react-router-dom";
 import { useUser } from '../api_context/UserContext'
 import { toast } from "react-toastify";
 
@@ -9,6 +9,8 @@ function NavigationBar() {
     logout,
     isLoggedIn
   } = useUser()
+
+  const navigate = useNavigate()
   
   return (
 
@@ -26,7 +28,10 @@ function NavigationBar() {
         
         {/* Display user */}
         {isLoggedIn && (
-          <div className="flex items-center gap-3 cursor-pointer">
+          <div 
+            className="flex items-center gap-3 cursor-pointer"
+            onClick={()=>navigate(`/user-profile`)}
+            >
             <div className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-500 text-white font-semibold">
               {user?.email?.charAt(0).toUpperCase()}
             </div>
@@ -42,6 +47,7 @@ function NavigationBar() {
             (
               <button
                 onClick={()=>{
+                  navigate('/')
                   logout()
                   toast.success('Logged out successfully')
                 }}

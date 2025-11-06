@@ -9,8 +9,16 @@ import NavigationBar from './components/NavigationBar';
 
 import Registration from './components/user/Registration'
 import Login from './components/user/Login'
+import UserProfile from './components/UserProfile'
+
+import { useUser } from './api_context/UserContext'
 
 function App() {
+
+    const {
+    isLoggedIn
+  } = useUser()
+
   return (
     <>
        <ToastContainer
@@ -48,7 +56,8 @@ function App() {
                     {/* All user routes */}
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Registration />} />
-                  <Route path="/user/:id" element={<h1>Specific user</h1>} />
+                  {/* isLoggedIn */}
+                  <Route path="/user-profile" element={<UserProfile />} />
           
                     {/* Transcribe links */}
                   <Route path="/transcribe/audio/link" element={<h1>Transcribe audio link</h1>} />
