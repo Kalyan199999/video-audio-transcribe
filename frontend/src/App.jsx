@@ -10,6 +10,7 @@ import NavigationBar from './components/NavigationBar';
 import Registration from './components/user/Registration'
 import Login from './components/user/Login'
 import UserProfile from './components/UserProfile'
+import Home from './components/Home'
 
 import { useUser } from './api_context/UserContext'
 
@@ -51,7 +52,7 @@ function App() {
 
                 <Routes>
                   {/* Home page */}
-                  <Route path="/" element={<h1>Home</h1>} />
+                  <Route path="/" element={<Home />} />
           
                     {/* All user routes */}
                   <Route path="/login" element={<Login />} />
