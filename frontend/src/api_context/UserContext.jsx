@@ -5,11 +5,19 @@ const UserContext = createContext();
 
 export function UserProvider({ children }) 
 {   
-  const url = "http://localhost:5000/api/user";
+  const url = "http://localhost:5050/api/user";
 
-  const [user, setUser] = useState(localStorage.getItem("email") || null);
+  const [user, setUser] =  useState(() => 
+      {
+          const savedUser = localStorage.getItem("user");
+          return savedUser ? JSON.parse(savedUser) : null;
+      });
+
   const [token, setToken] = useState(localStorage.getItem("token") || null);
+
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+
+  const [ error, setError ] = useState('');
 
   // User Registration
   const registration = async (data) => 
@@ -18,21 +26,34 @@ export function UserProvider({ children })
     {
       const response = await axios.post(`${url}/register`, data);
 
-      const { email, token } = response.data;
+      const data_fetched = response.data;
 
-      setUser(email);
-      setToken(token);
+      // console.log(response);
+      // console.log(data_fetched);
+      
+      const user_detail = data_fetched.data;
+
+      const user_token = data_fetched.token;
+
+      setUser(user_detail);
+      setToken(user_token);
       setIsLoggedIn(true);
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("email", email);
+      localStorage.setItem("token", user_token );
 
-      return response.data;
+      localStorage.setItem("user", JSON.stringify(user_detail));
+
+      return data_fetched.ok;
     } 
-    catch (error) 
+    catch (err) 
     {
-      console.error("Registration failed:", error.response?.data || error.message);
-      throw error; // Let caller handle toast/error UI
+      setError( err.response?.data?.message || "Email exists or password is not valid" )
+
+      console.log(err);
+      
+      console.error("Registration failed:", err.response?.data || err.message);
+
+      return false;
     }
   };
 
@@ -41,23 +62,31 @@ export function UserProvider({ children })
   {
     try 
     {
-      const response = await axios.post(`${url}/login`, data); // Corrected endpoint
+      const response = await axios.post(`${url}/login`, data); 
 
-      const { email, token } = response.data;
+      const data_fetched = response.data;
 
-      setUser(email);
-      setToken(token);
+      // console.log(data_fetched);
+      
+      const user_detail = data_fetched.data;
+
+      const user_token = data_fetched.token;
+
+      setUser(user_detail);
+      setToken(user_token);
       setIsLoggedIn(true);
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("email", email);
+      localStorage.setItem("token", user_token );
+      localStorage.setItem("user", JSON.stringify( user_detail ) );
 
-      return response.data;
+      return data_fetched.ok;
     } 
-    catch (error) 
+    catch (err) 
     {
-      console.error("Login failed:", error.response?.data || error.message);
-      throw error;
+      setError( err.response?.data?.message || "User not exists or invalid password!" );
+      console.error("Login failed:", err.response?.data || err.message);
+      // throw error;
+      return false;
     }
   };
 
@@ -65,7 +94,7 @@ export function UserProvider({ children })
   const logout = () => 
   {
     localStorage.removeItem("token");
-    localStorage.removeItem("email");
+    localStorage.removeItem("user");
     setUser(null);
     setToken(null);
     setIsLoggedIn(false);
@@ -80,6 +109,7 @@ export function UserProvider({ children })
         user,
         token,
         isLoggedIn,
+        error
       }}
     >
       {children}

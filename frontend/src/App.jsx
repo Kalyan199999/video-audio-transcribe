@@ -13,7 +13,18 @@ import Login from './components/user/Login'
 function App() {
   return (
     <>
-        <ToastContainer />
+       <ToastContainer
+        position="bottom-right"  
+        autoClose={3000}          // how long toast stays visible (ms)
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"           // or 'light' | 'dark'
+      />
 
 {/* <button onClick={()=>{toast.success('Successful!')} 
       }>btn</button> */}

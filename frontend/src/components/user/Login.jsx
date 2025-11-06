@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Link , useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify'
+
 import { validateEmail, 
   // validatePassword 
 } from "../../utils/util";
+
+import { useUser } from '../../api_context/UserContext'
 
 function Login() 
 {
@@ -20,6 +23,9 @@ function Login()
   };
 
   const navigate = useNavigate();
+
+  const { login,error } = useUser();
+  
 
   const validate = ()=>
   {
@@ -43,13 +49,27 @@ function Login()
 
     if( validate() )
     {
-      toast.success("Login Successful");
-      navigate("/");
-      setUser({ email: "", password: "" });
-      return;
+      const response = await login(user);
+
+      if( response )
+      {
+        toast.success("Login Successful");
+        navigate("/");
+        setUser({ email: "", password: "" });
+        return;
+      }
+      else
+      {
+        toast.error("Invalid Credentials");
+      }
+
+    }
+    else
+      {
+      toast.error("Invalid Credentials");
     }
 
-    toast.error("Invalid Credentials");
+    
 
   };
 
@@ -103,6 +123,12 @@ function Login()
             <p className="text-red-500 text-sm mt-1">{errors.password}</p>
           )}
         </div>
+
+        {/* error from backend */}
+        {
+          error && <p className="text-red-500 text-sm mt-1">{error}</p>
+        }
+
 
         {/* Submit Button */}
         <button

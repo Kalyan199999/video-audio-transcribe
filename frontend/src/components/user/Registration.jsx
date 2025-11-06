@@ -2,10 +2,17 @@ import  { useState } from "react";
 import { Link , useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify'
 import  {validateEmail , validatePassword } from '../../utils/util'
+import { useUser } from '../../api_context/UserContext'
 
 function Registration() 
 {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  const { 
+    registration , 
+    error 
+  } = useUser();
+    
 
   const [user, setUser] = useState({
     email: "",
@@ -26,37 +33,51 @@ function Registration()
     const mail = validateEmail(user.email)
     const pass = validatePassword(user.password)
     
-    if( mail !== null )
+    if( mail  )
     {
       newErrors.email = mail
     }
 
-    if( pass !== null )
+    if( pass )
     {
       newErrors.password = pass
     } 
 
-    console.log(newErrors);
-    
+    // console.log(newErrors);
 
     setErrors(newErrors);
 
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => 
+  const handleSubmit = async (e) => 
     {
         e.preventDefault();
 
         if (validate()) 
         {
-          toast.success("Registration successful!")
-          setUser({ email: "", password: "" });
-          navigate('/')
-          return
-        }
+          const response = await registration(user);
 
-        toast.error("Registration failed!")
+          console.log(response);
+          // console.log(error);
+
+          if( response)
+          {
+            toast.success("Registration successful!")
+            setUser({ email: "", password: "" });
+            navigate('/')
+            return
+          }
+          else
+          {
+            toast.error("Registration failed!")
+          }
+          
+        }
+        else
+        {
+          toast.error("Registration failed!")
+        }
   };
 
   return (
@@ -111,6 +132,12 @@ function Registration()
               <p className="text-red-500 text-sm mt-1">{errors.password}</p>
             )}
           </div>
+
+          {/* error from backend */}
+          
+          {
+            error && <p className="text-red-500 text-sm mt-1">{error}</p>
+          }
 
           {/* Submit Button */}
           <button
