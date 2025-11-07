@@ -50,7 +50,7 @@ const post_link_video = async (req, res) =>
       
       const transcription = await genAIVideoLinkTranscribe(url);
 
-      console.log(transcription);
+      // console.log(transcription);
       
       if(transcription.ok)
       {

@@ -24,7 +24,7 @@ const genAIVideoLinkTranscribe = async (url) =>
             // get the text
         const transcript = result.response.text();
 
-        console.log( transcript );
+        // console.log( transcript );
 
             return {
                 ok : true,
@@ -52,10 +52,10 @@ const genAIVideoTranscribe = async (filePath) =>
           { text: 'Transcribe this video to text accurately!' },
           fileData
         ]);
+        
+        const transcript = result.response.text();
 
-    const transcript = result.response.text();
-
-        console.log( transcript );
+        // console.log( transcript );
 
         return {
             ok : true,

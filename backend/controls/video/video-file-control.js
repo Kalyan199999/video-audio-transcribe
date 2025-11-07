@@ -66,8 +66,8 @@ const post_file_video = async (req, res) =>
 
       const file = req.file
       const {id} = req.body;
-      console.log(file);
-      console.log(id);
+    //   console.log(file);
+    //   console.log(id);
       
       const transcription = await genAIVideoTranscribe( file.path );
 
