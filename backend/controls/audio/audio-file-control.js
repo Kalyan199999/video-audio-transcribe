@@ -30,15 +30,22 @@ const get_audio = async (req,res)=>{
 const post_audio = async (req,res)=>{
     try 
     {
-        const file = req.file
+        console.log("Post method of audio file!");
         
-        const response = await genAIAudioTranscribe(file.path);
+        const file = req.file
+        const { id } = req.body;
+
+        // console.log(id);
+        // console.log(file);
+        
+        const response = await genAIAudioTranscribe( file.path );
         
         if( response.ok )
         {
             const data = await Audio({
                 audio:file,
-                text:response.text
+                text:response.text,
+                user:id
             })
 
             await data.save();
@@ -63,12 +70,14 @@ const post_audio = async (req,res)=>{
     } 
     catch (error) 
     {
+        console.log(error);
+        
         return res.status(404).json(
-            {
-                ok:false,
-                message:"Error while adding audio!",
-                data:error
-            }
+        {
+            ok:false,
+            message:"Error while adding audio!",
+            data:error
+        }
         )
     }
 }
