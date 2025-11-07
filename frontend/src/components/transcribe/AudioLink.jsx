@@ -1,4 +1,7 @@
 import React , { useState } from 'react'
+import { toast } from 'react-toastify';
+import { isValidYouTubeUrl } from '../../utils/util'
+
 
 function AudioLink() {
   const [url, setUrl] = useState("");
@@ -6,6 +9,18 @@ function AudioLink() {
     const handleChange = (e) => {
       setUrl(e.target.value);
     };
+
+    const handleSubmit = (e) => {
+      
+      if( isValidYouTubeUrl( url ) )
+      {
+        toast.success("URL is valid");
+      }
+      else
+      {
+        toast.error("URL is not valid");
+      }
+    }
   
     return (
       <div className="w-full h-full flex flex-col justify-center items-center gap-6 p-6">
@@ -39,6 +54,7 @@ function AudioLink() {
                 ? "bg-blue-600 text-white hover:bg-blue-700"
                 : "bg-gray-300 text-gray-500 cursor-not-allowed"}
             `}
+            onClick={handleSubmit}
           >
             Transcribe
             

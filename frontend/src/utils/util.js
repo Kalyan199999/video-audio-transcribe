@@ -35,3 +35,11 @@ export const validatePassword = (password) =>
   return null;
 };
 
+export const isValidYouTubeUrl = (url) => {
+  if (!url || typeof url !== "string") return false;
+
+  const pattern =
+    /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtu\.be\/)[a-zA-Z0-9_-]{11}/;
+
+  return pattern.test(url);
+};
