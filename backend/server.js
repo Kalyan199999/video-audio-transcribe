@@ -21,12 +21,12 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 port = process.env.PORT || 5000;
 
 // handles videos 
-app.use( '/api/file/video' , video_file_route );
-app.use('/api/link/video',video_link_route);
+app.use( '/api/video/file' , video_file_route );
+app.use('/api/video/link',video_link_route);
 
 // handles audios
-app.use('/api/file/audio', audio_file_route );
-app.use( '/api/link/audio' , audio_link_route );
+app.use('/api/audio/file', audio_file_route );
+app.use( '/api/audio/link' , audio_link_route );
 
 // hendles users
 app.use('/api/user' , user_route );

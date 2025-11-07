@@ -27,7 +27,7 @@ const post_link_audio = async (req,res) => {
     
     try 
     {
-        const { url } = req.body
+       const {url,id} = req.body;
 
         const audio = await genAIAudioLinkTranscribe(url)
 
@@ -43,7 +43,8 @@ const post_link_audio = async (req,res) => {
 
         const data = new Audio({
             url:url,
-            text:audio.data
+            text:audio.data,
+            user:id
         })
 
         await data.save()

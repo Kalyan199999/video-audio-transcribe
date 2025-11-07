@@ -44,9 +44,9 @@ const post_link_video = async (req, res) =>
 {
     try 
     { 
-      console.log("Post method!");
+      console.log("Post method of video link!");
 
-      const url = req.body.url;
+      const {url,id} = req.body;
       
       const transcription = await genAIVideoLinkTranscribe(url);
 
@@ -57,6 +57,7 @@ const post_link_video = async (req, res) =>
         const video = new Video({
           url: url,
           text: transcription.data,
+          user:id
         });
 
         await video.save();
@@ -71,7 +72,7 @@ const post_link_video = async (req, res) =>
       return res.status(400).json({ 
         ok:false,
         message: "Failed to generate it!" ,
-        data:"Captions not generated!"
+        data:transcription
       });
 
     } 

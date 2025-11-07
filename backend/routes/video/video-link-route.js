@@ -9,6 +9,6 @@ router.get('/' ,  get_link_video);
 
 router.get('/:id', get_link_video_id);
 
-router.post('/',verify, post_link_video);
-
+router.post('/', post_link_video);
+// verify
 module.exports = router;

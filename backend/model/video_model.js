@@ -19,6 +19,13 @@ const schema = mongoose.Schema({
     {
         type:String,
         default:"video"
+    },
+    user: 
+    {
+        // user reference
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true  
     }
     
 } , {timestamps: true});

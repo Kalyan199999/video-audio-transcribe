@@ -65,6 +65,9 @@ const post_file_video = async (req, res) =>
       console.log("Post method of file!");
 
       const file = req.file
+      const {id} = req.body;
+      console.log(file);
+      console.log(id);
       
       const transcription = await genAIVideoTranscribe( file.path );
 
@@ -75,6 +78,7 @@ const post_file_video = async (req, res) =>
         const video = new Video({
           video:file,
           text: transcription.data,
+          user:id
         });
 
         await video.save();
@@ -95,6 +99,8 @@ const post_file_video = async (req, res) =>
     } 
     catch (error) 
     {
+        console.log(error);
+        
         return res.status(400).json({
           ok:false, 
           message: "Failed",
@@ -107,5 +113,4 @@ module.exports = {
     get_file_video,
     get_file_video_id,
     post_file_video
-
 }
