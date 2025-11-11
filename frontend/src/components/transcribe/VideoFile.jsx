@@ -1,9 +1,24 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 
-function VideoFile() {
+import { useTranscribe } from '../../api_context/TranscribeContext';
+import { useUser } from '../../api_context/UserContext'
+
+function VideoFile( { param1, param2 } ) 
+{
+  // console.log({ param1, param2 });
+  
   const [file, setFile] = useState(null);
   const [downloadURL, setDownloadURL] = useState(null);
 
+  const { 
+    transcribe,
+    loading,
+   } = useTranscribe();
+
+   const { user,token } = useUser();
+
+  //  console.log(user.id);
+   
   const handleFileChange = (event) => 
   {
     const selected = event.target.files[0];
@@ -25,6 +40,30 @@ function VideoFile() {
       setDownloadURL(null);
     }
   };
+
+  const handleSubmit = async ()=>
+  {
+    try 
+    {
+      const formData = new FormData();
+      formData.append("video", file); 
+      formData.append("id", user.id); 
+
+      for (const pair of formData.entries()) 
+      {
+        console.log(pair[0] + ": ", pair[1]);
+      }
+
+      const res = await transcribe(param1,param2,token,formData);
+
+      console.log("Response inside the video file:",res);
+      
+    } 
+    catch (error) 
+    {
+      console.log("Error inside the videofile",error);
+    }
+  }
 
   return (
     <div className="w-full h-full flex flex-col items-center gap-6 p-4 sm:p-6">
@@ -93,7 +132,7 @@ function VideoFile() {
                 : "bg-gray-400 cursor-not-allowed"
             }
           `}
-          onClick={() => file && alert("clicked")}
+          onClick={handleSubmit}
       >
         Transcribe
       </button>

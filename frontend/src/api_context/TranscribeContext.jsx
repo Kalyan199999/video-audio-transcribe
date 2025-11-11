@@ -5,7 +5,7 @@ const TranscribeContext = createContext();
 
 export const TranscribeProvider = ({children}) => 
 {
-    const baseurl = 'http://localhost:5050/api/'
+    const baseurl = 'http://localhost:5050/api'
     
     const [transcript,setTranscript] = useState('');
     const [error , setError] = useState('');
@@ -27,15 +27,54 @@ export const TranscribeProvider = ({children}) =>
         }
     }
 
+   const transcribe = async (params1, params2, token, formData) => 
+    {
+        try {
+            setLoading(true);
+    
+            const response = await axios.post(
+                `${baseurl}/${params1}/${params2}`,
+                formData,
+                {
+                    headers: {
+                        "authorization": `Bearer ${token}`,
+                        
+                        "Content-Type": "multipart/form-data"
+                    }
+                }
+            );
+    
+            console.log(response);
+            setData(response.data);
+
+            return response.data;
+            
+        } 
+        catch (error) 
+        {
+            console.error("Error occurred:", error);
+            return error
+        } 
+        finally 
+        {
+            setLoading(false);
+        }
+    }
+
+
     return(
         <TranscribeContext.Provider 
-        value={{
-            transcript,
-            error,loading
-            }}>
+        value={
+            {
+                transcribe,
+                transcript,
+                error,
+                loading,
+            }
+        }>
             {children}
         </TranscribeContext.Provider>
     )
 }
 
-const useTranscribe = () => useContext(TranscribeContext);
+export const useTranscribe = () => useContext(TranscribeContext);

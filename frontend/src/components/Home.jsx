@@ -95,7 +95,7 @@ function Home()
       
           {
             param1 === 'video' && param2 === 'file' && (
-              <VideoFile />
+              <VideoFile param1 = {param1} param2={param2}/>
           )}
     
           {

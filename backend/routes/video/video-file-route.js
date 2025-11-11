@@ -16,6 +16,6 @@ router.get('/' ,  get_file_video );
 
 router.get('/:id', get_file_video_id );
 
-router.post('/', upload.single('video') , post_file_video );
-// verify
+router.post('/',verify, upload.single('video') , post_file_video );
+
 module.exports = router;
