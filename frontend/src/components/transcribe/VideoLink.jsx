@@ -1,25 +1,51 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { toast } from 'react-toastify';
 import { isValidYouTubeUrl } from '../../utils/util'
+import { useTranscribe } from '../../api_context/TranscribeContext';
+import { useUser } from '../../api_context/UserContext'
 
-function VideoLink() {
+function VideoLink( { param1, param2 } ) {
   const [url, setUrl] = useState("");
+
+  // console.log({ param1, param2 });
+  
+
+  const { 
+    transcribe,
+    loading,
+   } = useTranscribe();
+
+   const { user,token } = useUser();
 
   const handleChange = (e) => {
     setUrl(e.target.value);
   };
 
-   const handleSubmit = (e) => {
-        
-        if( isValidYouTubeUrl( url ) )
-        {
-          toast.success("URL is valid");
-        }
-        else
-        {
-          toast.error("URL is not valid");
-        }
+   const handleSubmit = async ()=>
+  {
+    try 
+    {
+      if (!isValidYouTubeUrl(url)) 
+      {
+        toast.error("Invalid YouTube URL");
+        return;
       }
+
+      const payload = {
+        id:user.id,
+        url:url
+      }
+
+      const res = await transcribe(param1,param2,token,payload,'json');
+
+      console.log("Response inside the video Link:",res);
+      
+    } 
+    catch (error) 
+    {
+      console.log("Error inside the video Link",error);
+    }
+  }
 
   return (
     <div className="w-full h-full flex flex-col justify-center items-center gap-6 p-6">

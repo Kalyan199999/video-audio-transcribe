@@ -96,6 +96,8 @@ export function UserProvider({ children })
   {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    localStorage.removeItem("transcribe");
+    
     setUser(null);
     setToken(null);
     setIsLoggedIn(false);

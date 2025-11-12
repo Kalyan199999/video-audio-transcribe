@@ -39,7 +39,7 @@ function Home()
               }`}
           onClick={()=>{
             setParam1('video')
-            handleNavigation()
+            // handleNavigation()
           }}
           >
             Video
@@ -52,7 +52,7 @@ function Home()
                 : 'text-black hover:hover:text-blue-700'
               }`}
           onClick={()=>{setParam1('audio')
-            handleNavigation()
+            // handleNavigation()
           }}
           >
             Audio
@@ -68,7 +68,7 @@ function Home()
                 : 'text-black hover:hover:text-blue-700'
               }`}
           onClick={()=>{setParam2('file')
-            handleNavigation()
+            // handleNavigation()
           }}
           >
             Upload
@@ -81,7 +81,7 @@ function Home()
                 : 'text-black hover:hover:text-blue-700'
               }`}
           onClick={()=>{setParam2('link')
-            handleNavigation()
+            // handleNavigation()
           }}
           >
             Link
@@ -100,7 +100,7 @@ function Home()
     
           {
             param1 === 'video' && param2 === 'link' && (
-              <VideoLink />
+              <VideoLink param1 = {param1} param2={param2} />
           )}
     
           {

@@ -10,7 +10,11 @@ export const TranscribeProvider = ({children}) =>
     const [transcript,setTranscript] = useState('');
     const [error , setError] = useState('');
     const [loading , setLoading] = useState(false);
-    const [data,setData] = useState()
+    const [data,setData] = useState(() => 
+      {
+          const savedUser = localStorage.getItem("transcribe");
+          return savedUser ? JSON.parse(savedUser) : null;
+      });
 
     const getTranscript = async ( params1,params2,id ) =>
     {
@@ -27,24 +31,37 @@ export const TranscribeProvider = ({children}) =>
         }
     }
 
-   const transcribe = async (params1, params2, token, formData) => 
+   const transcribe = async (params1, params2, token, formData,type = "form") => 
     {
         try {
             setLoading(true);
+
+            let headers = {
+                authorization: `Bearer ${token}`,
+            };
+            
+            let payload = formData;
+
+            if (type === "json") 
+            {
+                headers["Content-Type"] = "application/json";
+                payload = JSON.stringify( formData );
+            }           
+            else 
+            {
+                headers["Content-Type"] = "multipart/form-data";
+            }
     
             const response = await axios.post(
                 `${baseurl}/${params1}/${params2}`,
-                formData,
-                {
-                    headers: {
-                        "authorization": `Bearer ${token}`,
-                        
-                        "Content-Type": "multipart/form-data"
-                    }
-                }
+                payload,
+                { headers }
             );
     
             console.log(response);
+
+            localStorage.setItem( "transcribe", JSON.stringify( response.data ) );
+
             setData(response.data);
 
             return response.data;

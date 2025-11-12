@@ -46,11 +46,14 @@ const post_link_video = async (req, res) =>
     { 
       console.log("Post method of video link!");
 
+      console.log(req.body);
+      
+
       const {url,id} = req.body;
       
       const transcription = await genAIVideoLinkTranscribe(url);
 
-      // console.log(transcription);
+      console.log(transcription);
       
       if(transcription.ok)
       {
