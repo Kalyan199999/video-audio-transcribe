@@ -45,16 +45,28 @@ function NavigationBar() {
         {
             isLoggedIn ? 
             (
-              <button
-                onClick={()=>{
-                  navigate('/')
-                  logout()
-                  toast.success('Logged out successfully')
-                }}
-                className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
-              >
-                Logout
-              </button>
+              <div className="flex flex-row gap-2">
+
+                <button
+                  onClick={()=>{
+                    navigate('/transcribe/display')
+                  }}
+                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg">
+                  Last transcribe 
+                </button>
+
+                <button
+                  onClick={()=>{
+                    navigate('/')
+                    logout()
+                    toast.success('Logged out successfully')
+                  }}
+                  className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
+                >
+                  Logout
+                </button>
+
+              </div>
             ) : 
             (
               <Link

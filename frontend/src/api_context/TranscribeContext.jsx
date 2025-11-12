@@ -87,6 +87,7 @@ export const TranscribeProvider = ({children}) =>
                 transcript,
                 error,
                 loading,
+                data
             }
         }>
             {children}

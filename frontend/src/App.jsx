@@ -11,6 +11,7 @@ import Registration from './components/user/Registration'
 import Login from './components/user/Login'
 import UserProfile from './components/UserProfile'
 import Home from './components/Home'
+import DisplayTranscribe from './components/transcribe/DisplayTranscribe'
 
 import { useUser } from './api_context/UserContext'
 
@@ -67,6 +68,9 @@ function App() {
                     {/* Transcribe files */}
                   <Route path="/transcribe/audio/file" element={<h1>Transcribe audio file</h1>} />
                   <Route path="/transcribe/video/file" element={<h1>Transcribe video file</h1>} />
+
+                   {/* Display the transcribed data */}
+                   <Route path='/transcribe/display' element={<DisplayTranscribe />} />
           
                     {/* Catch-all route */}
                   <Route path="*" element={<h1>Page not found</h1>} />

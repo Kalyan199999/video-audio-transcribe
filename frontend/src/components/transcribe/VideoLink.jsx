@@ -1,14 +1,19 @@
 import  { useState } from "react";
 import { toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
+
 import { isValidYouTubeUrl } from '../../utils/util'
 import { useTranscribe } from '../../api_context/TranscribeContext';
 import { useUser } from '../../api_context/UserContext'
 
-function VideoLink( { param1, param2 } ) {
+
+function VideoLink( { param1, param2 } ) 
+{
   const [url, setUrl] = useState("");
 
+  const navigate = useNavigate();
+
   // console.log({ param1, param2 });
-  
 
   const { 
     transcribe,
@@ -21,7 +26,7 @@ function VideoLink( { param1, param2 } ) {
     setUrl(e.target.value);
   };
 
-   const handleSubmit = async ()=>
+  const handleSubmit = async ()=>
   {
     try 
     {
@@ -37,6 +42,9 @@ function VideoLink( { param1, param2 } ) {
       }
 
       const res = await transcribe(param1,param2,token,payload,'json');
+      setUrl('')
+      
+      navigate('/transcribe/display')
 
       console.log("Response inside the video Link:",res);
       

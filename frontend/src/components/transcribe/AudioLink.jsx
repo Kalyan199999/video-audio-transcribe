@@ -1,26 +1,61 @@
-import React , { useState } from 'react'
+import  { useState } from "react";
 import { toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
+
 import { isValidYouTubeUrl } from '../../utils/util'
+import { useTranscribe } from '../../api_context/TranscribeContext';
+import { useUser } from '../../api_context/UserContext'
 
 
-function AudioLink() {
+function AudioLink( { param1, param2 } ) {
   const [url, setUrl] = useState("");
+
+  const navigate = useNavigate();
+
+  // console.log({ param1, param2 });
+
+  const { 
+    transcribe,
+    loading,
+   } = useTranscribe();
+
+   const { user,token } = useUser();
   
     const handleChange = (e) => {
       setUrl(e.target.value);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async ()=>
+  {
+    try 
+    {
+      if (!isValidYouTubeUrl(url)) 
+      {
+        toast.error("Invalid YouTube URL");
+        return;
+      }
+
+      const payload = {
+        id:user.id,
+        url:url
+      }
+
+      const res = await transcribe(param1,param2,
+        token,
+        payload,
+        'json');
+        setUrl('')
       
-      if( isValidYouTubeUrl( url ) )
-      {
-        toast.success("URL is valid");
-      }
-      else
-      {
-        toast.error("URL is not valid");
-      }
+      navigate('/transcribe/display')
+
+      console.log("Response inside the Audio Link:",res);
+      
+    } 
+    catch (error) 
+    {
+      console.log("Error inside the Audio Link",error);
     }
+  }
   
     return (
       <div className="w-full h-full flex flex-col justify-center items-center gap-6 p-6">
@@ -32,7 +67,7 @@ function AudioLink() {
         <div className="w-full max-w-md p-6 rounded-xl shadow-md border bg-violet-100">
           
           <h2 className="text-xl font-semibold mb-4 text-center">
-            Enter Video URL
+            Enter Audio URL
           </h2>
   
           <input

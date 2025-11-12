@@ -8,25 +8,24 @@ import AudioLink from './transcribe/AudioLink'
 
 function Home() 
 {
-  const navigate = useNavigate();
+
 
   const [ param1 , setParam1 ] = useState( 'video' )
   const [ param2 , setParam2 ] = useState( 'file' )
   
-
+  // const navigate = useNavigate();
   const handleNavigation = ()=>
   {
     // navigate(`/transcribe/${param1}/${param2}`)
     console.log(param1);
     console.log(param2);
     
-    
   }
 
   return (
     <div className="min-h-screen w-full border border-red-400 m-2 p-4 md:p-10 flex flex-col items-center gap-4">
 
-      {/* ✅ Button Panel */}
+      {/*  Button Panel */}
       <div className="w-full sm:w-2/3 md:w-1/3 flex flex-col gap-2">
 
         {/* Row 1 */}
@@ -90,7 +89,7 @@ function Home()
 
       </div>
 
-      {/* ✅ Main Content Box */}
+      {/*  Main Content Box */}
       <div className="w-full sm:w-3/4 lg:w-2/3 flex-grow border border-gray-300 rounded-xl bg-white shadow-lg">
       
           {
@@ -105,12 +104,12 @@ function Home()
     
           {
             param1 === 'audio' && param2 === 'file' && (
-                <AudioFile />
+                <AudioFile param1 = {param1} param2={param2} />
           )}
         
           {
               param1 === 'audio' && param2 === 'link' && (
-                  <AudioLink />
+                  <AudioLink param1 = {param1} param2={param2} />
           )}
           
       </div>
