@@ -11,6 +11,9 @@ const video_file_route = require('./routes/video/video-file-route.js')
 const audio_file_route = require('./routes/audio/audio-file-route.js')
 const audio_link_route = require('./routes/audio/audio-link-route.js')
 
+const video_get_route = require('./routes/video/video-get-route.js')
+const audio_get_route = require('./routes/audio/audio-get-route.js')
+
 const user_route = require('./routes/user/user-route.js')
 
 const app = express();
@@ -27,6 +30,10 @@ app.use('/api/video/link',video_link_route);
 // handles audios
 app.use('/api/audio/file', audio_file_route );
 app.use( '/api/audio/link' , audio_link_route );
+
+// handle all the get video and audio requests
+app.use('/api/get/video' , video_get_route )
+app.use('/api/get/audio' , audio_get_route )
 
 // hendles users
 app.use('/api/user' , user_route );
