@@ -50,7 +50,8 @@ const register = async (req, res) =>
                 token:token,
                 data:{
                     email:newUser.email,
-                    id:newUser._id
+                    id:newUser._id,
+                    createdAt:newUser.createdAt
                 }
             });
     } 
@@ -166,8 +167,9 @@ const login = async (req, res) =>
                 message: 'User loged in successfully.',
                 token:token,
                 data:{
+                    id:user._id,
                     email:user.email,
-                    id:user._id
+                    createdAt:user.createdAt 
                 }
             });
 

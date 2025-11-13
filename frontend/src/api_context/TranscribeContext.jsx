@@ -49,7 +49,7 @@ export const TranscribeProvider = ({children}) =>
                 setVideo(response.data.data);
             }
          
-          console.log(response.data);
+        //   console.log(response.data);
           
         } 
         catch (error) 
