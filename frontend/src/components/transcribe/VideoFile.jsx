@@ -1,23 +1,27 @@
 import  { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { useTranscribe } from '../../api_context/TranscribeContext';
 import { useUser } from '../../api_context/UserContext'
+import { toast } from 'react-toastify';
 
 function VideoFile( { param1, param2 } ) 
 {
-  // console.log({ param1, param2 });
   
   const [file, setFile] = useState(null);
   const [downloadURL, setDownloadURL] = useState(null);
+  const navigate = useNavigate();
 
   const { 
     transcribe,
-    loading,
+    // loading,
    } = useTranscribe();
 
-   const { user,token } = useUser();
-
-  //  console.log(user.id);
+   const { 
+    user,
+    token,
+    isLoggedIn 
+  } = useUser();
    
   const handleFileChange = (event) => 
   {
@@ -43,6 +47,14 @@ function VideoFile( { param1, param2 } )
 
   const handleSubmit = async ()=>
   {
+
+    if( !isLoggedIn )
+    {
+      navigate('/login')
+      toast.warn('Please Login First')
+      return;
+    }
+
     try 
     {
       const formData = new FormData();

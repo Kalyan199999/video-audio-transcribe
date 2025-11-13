@@ -1,26 +1,80 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-function AudioFile() {
+import { useTranscribe } from '../../api_context/TranscribeContext';
+import { useUser } from '../../api_context/UserContext'
+import { toast } from 'react-toastify';
+
+function AudioFile( { param1, param2 }  ) 
+{
   const [file, setFile] = useState(null);
   const [downloadURL, setDownloadURL] = useState(null);
+  const navigate = useNavigate();
 
-  const handleFileChange = (event) => {
+    const { 
+    transcribe,
+    // loading,
+   } = useTranscribe();
+
+   const { 
+    user,
+    token,
+    isLoggedIn 
+  } = useUser();
+
+  const handleFileChange = (event) => 
+  {
     const selected = event.target.files[0];
 
-    if (selected && selected.type.startsWith("audio/")) {
+    if (selected && selected.type.startsWith("audio/")) 
+    {
       setFile(selected);
 
       // Create downloadable URL
       const url = URL.createObjectURL(selected);
       setDownloadURL(url);
 
-      console.log("Audio selected:", selected);
-    } else {
-      alert("Please upload a valid audio file.");
+      console.log("Selected video:", selected);
+    } 
+    else 
+    {
+      toast.warn("Please upload a valid audio file.");
       setFile(null);
       setDownloadURL(null);
     }
   };
+
+  const handleSubmit = async ()=>
+  {
+
+    if( !isLoggedIn )
+    {
+      navigate('/login')
+      toast.warn('Please Login First')
+      return;
+    }
+
+    try 
+    {
+      const formData = new FormData();
+      formData.append("video", file); 
+      formData.append("id", user.id); 
+
+      for (const pair of formData.entries()) 
+      {
+        console.log(pair[0] + ": ", pair[1]);
+      }
+
+      const res = await transcribe(param1,param2,token,formData);
+
+      console.log("Response inside the video file:",res);
+      
+    } 
+    catch (error) 
+    {
+      console.log("Error inside the videofile",error);
+    }
+  }
 
   return (
     <div className="w-full h-full flex flex-col items-center gap-6 p-4 sm:p-6">
@@ -90,7 +144,7 @@ function AudioFile() {
                 : "bg-gray-400 cursor-not-allowed"
             }
           `}
-          onClick={() => file && alert("clicked")}
+          onClick={handleSubmit}
       >
         Transcribe
       </button>

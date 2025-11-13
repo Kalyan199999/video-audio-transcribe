@@ -12,14 +12,17 @@ function AudioLink( { param1, param2 } ) {
 
   const navigate = useNavigate();
 
-  // console.log({ param1, param2 });
 
   const { 
     transcribe,
-    loading,
+    // loading,
    } = useTranscribe();
 
-   const { user,token } = useUser();
+  const { 
+    user,
+    token,
+    isLoggedIn 
+  } = useUser();
   
     const handleChange = (e) => {
       setUrl(e.target.value);
@@ -27,6 +30,13 @@ function AudioLink( { param1, param2 } ) {
 
     const handleSubmit = async ()=>
   {
+    if( !isLoggedIn )
+    {
+      navigate('/login')
+      toast.warn('Please Login First')
+      return;
+    }
+    
     try 
     {
       if (!isValidYouTubeUrl(url)) 
