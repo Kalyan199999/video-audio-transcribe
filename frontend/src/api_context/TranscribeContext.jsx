@@ -16,20 +16,85 @@ export const TranscribeProvider = ({children}) =>
           return savedUser ? JSON.parse(savedUser) : null;
       });
 
-    const getTranscript = async ( params1,params2,id ) =>
+    const [allAudios , setAudio ] = useState(null);
+
+    const [allVideos , setVideo ] = useState(null);
+
+    
+    const getAll_Audio_video = async (token, payload, type = "video") => 
     {
-        setLoading(true);
-        try{
-            const response = await axios.get(baseurl + 'transcribe', {params: {params1,params2,id}});
-            setTranscript(response.data);
-            setLoading(false);
-        }
-        catch(err)
+        try {
+          setLoading(true);
+        
+          const endpoint = type === "audio" ? "audio" : "video";
+        
+          // use POST to send body payload
+          const response = await axios.post(
+                `${baseurl}/get/${endpoint}/`,
+                payload,
+                {
+                  headers: {
+                    authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                  },
+                }
+            );
+         
+            if (type === "audio") 
+            {
+                setAudio(response.data.data);
+            } 
+            else    
+            {
+                setVideo(response.data.data);
+            }
+         
+          console.log(response.data);
+          
+        } 
+        catch (error) 
         {
-            setError(err.message);
-            setLoading(false);
+          console.error("Audio/video fetch error:", error);
+          return error;
+        } 
+        finally 
+        {
+          setLoading(false);
         }
-    }
+    };
+
+
+
+    // const getAllVideos = async ( token , payload ) =>
+    // {
+    //     try 
+    //     {
+    //         setLoading(true);
+
+    //         const response = await axios.get( 
+    //             `${baseurl}/get/video/`,
+    //             payload,
+    //             {
+    //                 headers: {
+    //                     'authorization': `Bearer ${token}`
+    //                 }
+    //             }
+    //         )
+
+    //         setVideo(response.data);
+            
+    //         console.log(response.data);
+
+    //         setLoading(false)
+
+    //         return response.data;
+    //     } 
+    //     catch (error) 
+    //     {
+    //         console.log("Audio error:",error);
+            
+    //     }
+    // }
 
    const transcribe = async (params1, params2, token, formData,type = "form") => 
     {
@@ -85,6 +150,10 @@ export const TranscribeProvider = ({children}) =>
             {
                 transcribe,
                 transcript,
+                // getAllVideos,
+                getAll_Audio_video,
+                allAudios,
+                allVideos,
                 error,
                 loading,
                 data

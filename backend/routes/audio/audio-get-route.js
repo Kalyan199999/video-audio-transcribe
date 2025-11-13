@@ -9,7 +9,7 @@ const {
 
 const router = express.Router();
 
-router.get('/', verify, get_audio);
+router.post('/', verify, get_audio);
 
 router.get('/:id', verify, get_audio_id);
 

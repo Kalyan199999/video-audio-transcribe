@@ -8,7 +8,7 @@ const {
 
 const router = express.Router();
 
-router.get('/', verify, get_video);
+router.post('/', verify, get_video);
 
 router.get('/:id', verify, get_video_id);
 
