@@ -12,6 +12,8 @@ import Login from './components/user/Login'
 import UserProfile from './components/UserProfile'
 import Home from './components/Home'
 import DisplayTranscribe from './components/transcribe/DisplayTranscribe'
+import DisplayAudioId from './components/transcribe/DisplayAudioId'
+import DisplayVideoId from './components/transcribe/DisplayVideoId'
 
 import { useUser } from './api_context/UserContext'
 
@@ -71,6 +73,8 @@ function App() {
 
                    {/* Display the transcribed data */}
                    <Route path='/transcribe/display' element={<DisplayTranscribe />} />
+                   <Route path='/transcribe/display/audio/:id' element={<DisplayAudioId />} />
+                   <Route path='/transcribe/display/video/:id' element={<DisplayVideoId />} />
           
                     {/* Catch-all route */}
                   <Route path="*" element={<h1>Page not found</h1>} />

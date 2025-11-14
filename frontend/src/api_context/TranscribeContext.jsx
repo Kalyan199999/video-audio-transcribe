@@ -20,6 +20,10 @@ export const TranscribeProvider = ({children}) =>
 
     const [allVideos , setVideo ] = useState(null);
 
+    const [videodata , setVideoData] = useState(null);
+
+    const [audiodata , setAudioData] = useState(null);
+
     
     const getAll_Audio_video = async (token, payload, type = "video") => 
     {
@@ -55,13 +59,57 @@ export const TranscribeProvider = ({children}) =>
         catch (error) 
         {
           console.error("Audio/video fetch error:", error);
-          return error;
+        //   return error;
         } 
         finally 
         {
           setLoading(false);
         }
     };
+
+    const get_Audio_video_id = async (token,id, type = "video") => 
+    {
+        try 
+        {
+            setLoading(true);
+            
+            const endpoint = type === "audio" ? "audio" : "video";
+        
+          // use POST to send body payload
+            const response = await axios.get(
+                `${baseurl}/get/${endpoint}/${id}`,
+                {
+                  headers: {
+                    authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                  },
+                }
+            );
+
+            console.log(response.data);
+            
+
+            if (type === "audio") 
+            {
+                setAudioData(response.data.data);
+            } 
+            else    
+            {
+                setVideoData(response.data.data);
+            }
+
+
+        } 
+        catch (error) 
+        {
+            console.error("Audio/video by id fetch error:", error);
+            // return error;
+        }
+        finally
+        {
+            setLoading(false);
+        }
+    }
 
 
 
@@ -154,6 +202,9 @@ export const TranscribeProvider = ({children}) =>
                 getAll_Audio_video,
                 allAudios,
                 allVideos,
+                get_Audio_video_id,
+                videodata,
+                audiodata,
                 error,
                 loading,
                 data

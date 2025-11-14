@@ -1,8 +1,12 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { useTranscribe } from '../../api_context/TranscribeContext';
 import { useUser } from '../../api_context/UserContext';
 
 function DisplayAudios() {
+  const navigate = useNavigate();
+
   const { getAll_Audio_video, allAudios } = useTranscribe();
   const { token, user } = useUser();
 
@@ -28,20 +32,27 @@ function DisplayAudios() {
           {allAudios.map((item) => (
             <div
               key={item._id}
-              
+              onClick={()=>navigate(`/transcribe/display/audio/${item._id}`)}
               className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden flex flex-col items-center p-4 cursor-pointer"
             >
               {/* 🎧 Audio Player */}
               {item.audio?.path && (
-                <audio
-                  controls
-                  src={
-                    item.audio.path.startsWith('http')
-                      ? item.audio.path
-                      : `https://your-server-domain.com${item.audio.path}`
-                  }
-                  className="w-full mb-4"
-                />
+                // <audio
+                //   controls
+                //   src={
+                //     item.audio.path.startsWith('http')
+                //       ? item.audio.path
+                //       : `https://your-server-domain.com${item.audio.path}`
+                //   }
+                //   className="w-full mb-4"
+                // />
+
+                <p 
+                  className="text-lg text-blue-600 break-all text-center mb-2 hover:underline"
+                >
+                    {item.audio.originalname} 
+                </p>
+                
               )}
 
               {/* 🔗 Audio URL */}

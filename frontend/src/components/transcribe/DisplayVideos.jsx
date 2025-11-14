@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranscribe } from '../../api_context/TranscribeContext';
 import { useUser } from '../../api_context/UserContext';
 
 function DisplayVideos() {
+  const navigate = useNavigate();
   const { getAll_Audio_video, allVideos } = useTranscribe();
   const { token, user } = useUser();
 
@@ -39,14 +41,20 @@ function DisplayVideos() {
             return (
               <div
                 key={item._id}
+                onClick={()=>navigate(`/transcribe/display/video/${item._id}`)}
                 className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden flex flex-col items-center p-4 cursor-pointer"
               >
                 {item.video && (
-                  <video
-                    src={item.video.path}
-                    controls
-                    className="w-full rounded-md mb-4 bg-black"
-                  />
+                  // <video
+                  //   src={item.video.path}
+                  //   controls
+                  //   className="w-full rounded-md mb-4 bg-black"
+                  // />
+                  <p 
+                    className="text-sm text-blue-600 break-all text-center mb-2 hover:underline"
+                  >
+                      {item.video.originalname}
+                  </p>
                 )}
 
                 { 
