@@ -55,3 +55,6 @@ A full-stack web application that allows users to upload audio and video files a
   <source src="./sample_files/recording.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
+## 🎥 Demo Video
+
+[![Watch the demo]](https://github.com/Kalyan199999/video-audio-transcribe/blob/master/sample_files/recording.mp4)
