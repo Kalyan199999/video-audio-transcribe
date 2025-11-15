@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranscribe } from '../../api_context/TranscribeContext';
 import { useUser } from '../../api_context/UserContext';
+import { handleDownloadDocument } from '../../utils/util'
 
 function DisplayAudioId() {
   const { id } = useParams();
@@ -50,6 +51,16 @@ function DisplayAudioId() {
           <p className="text-gray-700 leading-relaxed whitespace-pre-wrap mt-3">
             {item.text}
           </p>
+
+            <div className="flex justify-end mt-4">
+              <button
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+                onClick={(e)=>{handleDownloadDocument(item.text , "audio_transcribe")}}
+              >
+                Download
+              </button>
+          </div>
+
         </div>
       ))}
     </div>

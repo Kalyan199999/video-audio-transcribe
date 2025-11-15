@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranscribe } from '../../api_context/TranscribeContext';
 import { useUser } from '../../api_context/UserContext';
+import { handleDownloadDocument } from '../../utils/util'
 
 function DisplayVideoId() {
   const { id } = useParams();
@@ -16,6 +17,9 @@ function DisplayVideoId() {
       console.log("error");
     }
   };
+
+  
+  
 
   useEffect(() => {
     fetchData();
@@ -53,6 +57,17 @@ function DisplayVideoId() {
           <p className="text-gray-700 leading-relaxed whitespace-pre-wrap mt-3">
             {item.text}
           </p>
+
+          <div className="flex justify-end mt-4">
+              <button
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+                onClick={() => handleDownloadDocument(item.text, "video_transcribe")}
+              >
+                Download
+              </button>
+          </div>
+
+
         </div>
       ))}
     </div>
