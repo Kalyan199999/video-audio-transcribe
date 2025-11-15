@@ -50,11 +50,12 @@ function VideoLink( { param1, param2 } )
         url:url
       }
 
-      const res = await transcribe(param1,param2,token,payload,'json');
-      setUrl('')
-      
       navigate('/transcribe/display')
 
+      const res = await transcribe(param1,param2,token,payload,'json');
+      
+      setUrl('')
+      
       console.log("Response inside the video Link:",res);
       
     } 

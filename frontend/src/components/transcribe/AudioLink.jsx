@@ -50,14 +50,15 @@ function AudioLink( { param1, param2 } ) {
         url:url
       }
 
+      navigate('/transcribe/display')
+
       const res = await transcribe(param1,param2,
         token,
         payload,
         'json');
+
         setUrl('')
       
-      navigate('/transcribe/display')
-
       console.log("Response inside the Audio Link:",res);
       
     } 

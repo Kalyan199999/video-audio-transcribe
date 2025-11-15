@@ -66,7 +66,10 @@ function VideoFile( { param1, param2 } )
         console.log(pair[0] + ": ", pair[1]);
       }
 
+      navigate('/transcribe/display')
+
       const res = await transcribe(param1,param2,token,formData);
+      setFile(null)
 
       console.log("Response inside the video file:",res);
       

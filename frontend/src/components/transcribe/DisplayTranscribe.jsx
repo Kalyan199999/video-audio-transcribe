@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useTranscribe } from "../../api_context/TranscribeContext";
+import { handleDownloadDocument } from '../../utils/util'
 
 function DisplayTranscribe() {
   const { loading, data } = useTranscribe();
@@ -59,6 +60,19 @@ function DisplayTranscribe() {
               </p>
             </div>
           )}
+
+          {
+            transcribeData?.text && 
+
+            <div className="flex justify-end mt-4">
+              <button
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+                onClick={() => handleDownloadDocument(transcribeData.text, "transcribe")}
+              >
+                Download
+              </button>
+          </div>
+          }
         </div>
       </div>
     </div>
